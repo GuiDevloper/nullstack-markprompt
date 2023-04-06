@@ -1,5 +1,6 @@
 import Nullstack, { NullstackClientContext } from 'nullstack'
 
+import Footer from './components/Footer'
 import Markprompt from './components/Markprompt'
 import ProjectIcon from './components/ProjectIcon'
 import ProjectsDropdown from './components/ProjectsDropdown'
@@ -15,6 +16,7 @@ class Home extends Nullstack {
   render({ params, settings }: NullstackClientContext) {
     const Project = findProject(params.project)
     const projectKey = settings[getSettingsKeyName(Project.envKey)]
+
     return (
       <section class="w-full max-w-3xl h-screen mx-auto flex flex-wrap">
         <div class="flex h-[calc(100vh-50px)] w-screen items-center justify-center px-4 py-4 pb-0">
@@ -45,6 +47,7 @@ class Home extends Nullstack {
             </div>
           </div>
         </div>
+        <Footer />
       </section>
     )
   }
