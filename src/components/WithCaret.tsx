@@ -1,3 +1,4 @@
+import '../styles/WithCaret.css'
 import Nullstack from 'nullstack'
 
 import 'prism-material-themes/themes/material-palenight.css'
@@ -40,12 +41,18 @@ class WithCaret extends Nullstack<WithCaretProps> {
 
   render({ children, docsUrl, loading }: WithCaretProps) {
     const mdown = addHostToSublinks(docsUrl, children[0])
-    const html = MD.render(this.simulateCaret({ mdown }))
+    const hasHTML = mdown.length > 0
+    const html = hasHTML ? MD.render(this.simulateCaret({ mdown })) : ''
 
-    return mdown.length === 0 && loading ? (
-      <Caret />
-    ) : (
-      <div class="result" html={html} />
+    return (
+      <div
+        class={`prompt-answer prose-invert prose-sm md:prose-base ${
+          loading ? 'prompt-answer-loading' : 'prompt-answer-done'
+        }`}
+        html={html}
+      >
+        <Caret />
+      </div>
     )
   }
 

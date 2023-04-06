@@ -1,3 +1,4 @@
+import '../styles/Markprompt.css'
 import Nullstack, { NullstackClientContext } from 'nullstack'
 
 import WithCaret from './WithCaret'
@@ -176,13 +177,7 @@ class Markprompt extends Nullstack<MarkpromptProps> {
           ref={this.containerRef}
           class="hidden-scrollbar prose absolute inset-x-0 bottom-0 top-12 z-0 max-w-full overflow-y-auto scroll-smooth py-4 pb-8 dark:prose-invert"
         >
-          <div
-            class={`prompt-answer prose-invert prose-sm md:prose-base ${
-              this.loading ? 'prompt-answer-loading' : 'prompt-answer-done'
-            }`}
-          >
-            <WithCaret loading={this.loading}>{this.answer}</WithCaret>
-          </div>
+          <WithCaret loading={this.loading}>{this.answer}</WithCaret>
           {this.answer.length > 0 && this.references.length > 0 && (
             <div class="mt-8 border-t border-neutral-900 pt-4 text-sm text-neutral-500">
               <div class="animate-slide-up">

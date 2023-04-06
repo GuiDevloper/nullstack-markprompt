@@ -1,0 +1,31 @@
+.prompt-answer-done .caret {
+  @apply hidden;
+}
+
+.prompt-answer-loading .caret {
+  @apply visible;
+}
+
+.animate-caret {
+  animation-name: caret;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+  transition-timing-function: cubic-bezier(0.14, 0, 0.16, 1);
+}
+
+@keyframes caret {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.prompt-answer pre,
+.prompt-answer p {
+  margin: 0 0 10px;
+}
