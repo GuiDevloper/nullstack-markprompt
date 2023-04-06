@@ -1,11 +1,20 @@
 import Nullstack from 'nullstack'
 
+import 'prism-material-themes/themes/material-palenight.css'
+import { highlight as PrismHighlight, languages as PrismLangs } from 'prismjs'
 import { Remarkable } from 'remarkable'
 
 declare const Caret: WithCaret['renderCaret']
 import type { NullstackMarkpromptProps } from './Markprompt'
 
-const MD = new Remarkable()
+import 'prismjs/components/prism-jsx.min'
+const MD = new Remarkable({
+  highlight(code, lang) {
+    if (!PrismLangs[lang]) return ''
+
+    return PrismHighlight(code, PrismLangs[lang], lang)
+  },
+})
 
 function addHostToSublinks(host: string, content: string) {
   return content.replace(/\]\(([^http]){1}/, `](${host}$1`)
