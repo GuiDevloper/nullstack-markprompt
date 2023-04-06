@@ -1,5 +1,10 @@
 import Nullstack, { NullstackClientContext } from 'nullstack'
 
+import WithCaret from './WithCaret'
+
+const MARKPROMPT_COMPLETIONS_URL = 'https://api.markprompt.com/v1/completions'
+const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___'
+
 type OpenAIModel = OpenAIChatCompletionsModel | OpenAICompletionsModel
 
 type OpenAIChatCompletionsModel =
@@ -21,6 +26,8 @@ type OpenAICompletionsModel =
   | 'babbage'
   | 'ada'
 
+const DEFAULT_MODEL: OpenAIModel = 'gpt-3.5-turbo'
+
 type MarkpromptProps = {
   projectKey: string
   originalUrl: string
@@ -34,7 +41,7 @@ type MarkpromptProps = {
   completionsUrl?: string
 }
 
-type NullstackMarkpromptProps = Partial<MarkpromptProps> &
+export type NullstackMarkpromptProps = Partial<MarkpromptProps> &
   Partial<NullstackClientContext>
 
 class Markprompt extends Nullstack<MarkpromptProps> {
@@ -76,11 +83,81 @@ class Markprompt extends Nullstack<MarkpromptProps> {
     setTimeout(this.autoScroll, 200)
   }
 
+  async callPrompt({
+    projectKey,
+    iDontKnowMessage = 'Error 404: Answer not found',
+    completionsUrl = MARKPROMPT_COMPLETIONS_URL,
+    model = DEFAULT_MODEL,
+  }: NullstackMarkpromptProps) {
+    if (!this.prompt) {
+      return
+    }
+
+    this.setAnswer({})
+    this.setReferences({})
+    this.loading = true
+
+    try {
+      const res = await fetch(completionsUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: this.prompt,
+          model,
+          iDontKnowMessage,
+          projectKey,
+        }),
+      })
+
+      if (!res.ok || !res.body) {
+        const text = await res.text()
+        console.error('Error:', text)
+        this.loading = false
+        this.setAnswer({ msg: iDontKnowMessage })
+        return
+      }
+
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let done = false
+      let startText = ''
+      let didHandleHeader = false
+      let refs: string[] = []
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read()
+        done = doneReading
+        const chunkValue = decoder.decode(value)
+        if (!didHandleHeader) {
+          startText = startText + chunkValue
+          if (startText.includes(STREAM_SEPARATOR)) {
+            const parts = startText.split(STREAM_SEPARATOR)
+            try {
+              refs = JSON.parse(parts[0])
+              // eslint-disable-next-line no-empty
+            } catch {}
+            this.setAnswer({ msg: parts[1] })
+            didHandleHeader = true
+          }
+        } else {
+          this.setAnswer({ msg: chunkValue })
+        }
+      }
+      this.loading = false
+      this.setReferences({ refs })
+    } catch (e) {
+      console.error('Error', e)
+      this.setAnswer({ msg: iDontKnowMessage })
+    }
+  }
+
   render({ originalUrl }: NullstackMarkpromptProps) {
     return (
       <div class="relative flex h-full flex-col prose-invert">
         <div class="h-12 border-b border-neutral-900">
-          <form>
+          <form onsubmit={this.callPrompt}>
             <input
               bind={this.prompt}
               type="text"
@@ -103,7 +180,9 @@ class Markprompt extends Nullstack<MarkpromptProps> {
             class={`prompt-answer prose-invert prose-sm md:prose-base ${
               this.loading ? 'prompt-answer-loading' : 'prompt-answer-done'
             }`}
-          />
+          >
+            <WithCaret loading={this.loading}>{this.answer}</WithCaret>
+          </div>
           {this.answer.length > 0 && this.references.length > 0 && (
             <div class="mt-8 border-t border-neutral-900 pt-4 text-sm text-neutral-500">
               <div class="animate-slide-up">
