@@ -1,0 +1,134 @@
+import Nullstack, { NullstackClientContext } from 'nullstack'
+
+type OpenAIModel = OpenAIChatCompletionsModel | OpenAICompletionsModel
+
+type OpenAIChatCompletionsModel =
+  | 'gpt-4'
+  | 'gpt-4-0314'
+  | 'gpt-4-32k'
+  | 'gpt-4-32k-0314'
+  | 'gpt-3.5-turbo'
+  | 'gpt-3.5-turbo-0301'
+
+type OpenAICompletionsModel =
+  | 'text-davinci-003'
+  | 'text-davinci-002'
+  | 'text-curie-001'
+  | 'text-babbage-001'
+  | 'text-ada-001'
+  | 'davinci'
+  | 'curie'
+  | 'babbage'
+  | 'ada'
+
+type MarkpromptProps = {
+  projectKey: string
+  originalUrl: string
+  docsUrl: string
+  projectName?: string
+  model?: OpenAIModel
+  iDontKnowMessage?: string
+  placeholder?: string
+  autoScrollDisabled?: boolean
+  /** Markprompt API url */
+  completionsUrl?: string
+}
+
+type NullstackMarkpromptProps = Partial<MarkpromptProps> &
+  Partial<NullstackClientContext>
+
+class Markprompt extends Nullstack<MarkpromptProps> {
+
+  prompt = ''
+  answer = ''
+  references: string[] = []
+  loading = false
+  containerRef: HTMLDivElement
+  answerContainerRef: HTMLDivElement
+
+  getPlaceholder({ placeholder, projectName }: NullstackMarkpromptProps) {
+    if (placeholder) return placeholder
+
+    return `Ask me anything${projectName ? ` about ${projectName}` : ''}...`
+  }
+
+  autoScroll({ autoScrollDisabled = false }: NullstackMarkpromptProps) {
+    if (autoScrollDisabled || !this.containerRef || !this.answerContainerRef) {
+      return
+    }
+
+    const childRect = this.answerContainerRef.getBoundingClientRect()
+    this.containerRef.scrollTop = childRect.bottom
+  }
+
+  setAnswer({ msg = null }) {
+    if (msg === null) {
+      this.answer = ''
+      return
+    }
+    this.answer += msg
+    this.autoScroll({})
+  }
+
+  setReferences({ refs = [] }) {
+    this.references = refs
+    // waiting for the slide-up animation
+    setTimeout(this.autoScroll, 200)
+  }
+
+  render({ originalUrl }: NullstackMarkpromptProps) {
+    return (
+      <div class="relative flex h-full flex-col prose-invert">
+        <div class="h-12 border-b border-neutral-900">
+          <form>
+            <input
+              bind={this.prompt}
+              type="text"
+              placeholder={this.getPlaceholder({})}
+              class="w-full appearance-none rounded-md border-0 bg-transparent px-0 pt-1 pb-2 outline-none placeholder:text-neutral-500 focus:outline-none focus:ring-0 text-base md:text-lg"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="none"
+              spellcheck="false"
+              autofocus
+            />
+          </form>
+        </div>
+        <div class="absolute inset-x-0 bottom-0 z-10 h-10 bg-gradient-to-t from-neutral-1100 to-neutral-1100/0" />
+        <div
+          ref={this.containerRef}
+          class="hidden-scrollbar prose absolute inset-x-0 bottom-0 top-12 z-0 max-w-full overflow-y-auto scroll-smooth py-4 pb-8 dark:prose-invert"
+        >
+          <div
+            class={`prompt-answer prose-invert prose-sm md:prose-base ${
+              this.loading ? 'prompt-answer-loading' : 'prompt-answer-done'
+            }`}
+          />
+          {this.answer.length > 0 && this.references.length > 0 && (
+            <div class="mt-8 border-t border-neutral-900 pt-4 text-sm text-neutral-500">
+              <div class="animate-slide-up">
+                Summary generated from the following sources:
+                <div class="mt-4 flex w-full flex-row flex-wrap items-center gap-2">
+                  {this.references.map((r) => (
+                    <a
+                      key={`reference-${r}`}
+                      class="cursor-pointer rounded-md border border-neutral-900 bg-neutral-1100 px-2 py-1 font-medium text-neutral-300 transition hover:border-neutral-800 hover:text-neutral-200"
+                      href={`${originalUrl}${r}`}
+                      target="_blank"
+                    >
+                      {r}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+          <div ref={this.answerContainerRef} />
+        </div>
+      </div>
+    )
+  }
+
+}
+
+export default Markprompt
