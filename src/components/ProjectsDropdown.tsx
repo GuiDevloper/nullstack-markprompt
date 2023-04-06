@@ -1,10 +1,24 @@
-import Nullstack from 'nullstack'
+import Nullstack, { NullstackClientContext } from 'nullstack'
+
+import { PROJECTS } from '../utils/projects'
+
+function haveBorder(idx: number) {
+  const have = idx < PROJECTS.length - 1
+  return have ? 'border-b border-gray-700' : ''
+}
 
 class ProjectsDropdown extends Nullstack {
 
   isOpen = false
 
+  isActive({ router, url }: Partial<NullstackClientContext> & { url: string }) {
+    const active = router.path === `/${url}`
+    return active ? 'underline text-pink-200' : ''
+  }
+
   render() {
+    // enable only with 2 projects or more
+    if (PROJECTS.length < 2) return false
     return (
       <div class="relative inline-block text-left bg-gray-900 ">
         <div>
@@ -44,21 +58,18 @@ class ProjectsDropdown extends Nullstack {
           tabindex="-1"
         >
           <div class="py-1">
-            <a
-              href="/"
-              class="block px-4 py-2 border-b border-gray-700 text-sm hover:underline hover:text-pink-200"
-              role="menuitem"
-            >
-              Nullstack
-            </a>
-            <a
-              href="/vite"
-              class="block px-4 py-2 text-sm"
-              role="menuitem"
-              id="menu-item-2"
-            >
-              ViteJS
-            </a>
+            {PROJECTS.map((P, idx) => (
+              <a
+                href={`/${P.url}`}
+                class={`block px-4 py-2 text-sm hover:underline hover:text-pink-200 ${this.isActive(
+                  { url: P.url },
+                )} ${haveBorder(idx)}`}
+                role="menuitem"
+                onclick={{ isOpen: false }}
+              >
+                {P.name}
+              </a>
+            ))}
           </div>
         </div>
       </div>
