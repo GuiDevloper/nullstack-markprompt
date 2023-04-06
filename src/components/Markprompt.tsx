@@ -3,6 +3,8 @@ import Nullstack, { NullstackClientContext } from 'nullstack'
 
 import WithCaret from './WithCaret'
 
+declare const References: Markprompt['renderReferences']
+
 const MARKPROMPT_COMPLETIONS_URL = 'https://api.markprompt.com/v1/completions'
 const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___'
 
@@ -84,6 +86,31 @@ class Markprompt extends Nullstack<MarkpromptProps> {
     setTimeout(this.autoScroll, 200)
   }
 
+  renderReferences({ originalUrl }: NullstackMarkpromptProps) {
+    return (
+      this.answer.length > 0 &&
+      this.references.length > 0 && (
+        <div class="mt-8 border-t border-neutral-900 pt-4 text-sm text-neutral-500">
+          <div class="animate-slide-up">
+            Summary generated from the following sources:
+            <div class="mt-4 flex w-full flex-row flex-wrap items-center gap-2">
+              {this.references.map((r) => (
+                <a
+                  key={`reference-${r}`}
+                  class="cursor-pointer rounded-md border border-neutral-900 bg-neutral-1100 px-2 py-1 font-medium text-neutral-300 transition hover:border-neutral-800 hover:text-neutral-200"
+                  href={`${originalUrl}${r}`}
+                  target="_blank"
+                >
+                  {r}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )
+    )
+  }
+
   async callPrompt({
     projectKey,
     iDontKnowMessage = 'Error 404: Answer not found',
@@ -154,7 +181,7 @@ class Markprompt extends Nullstack<MarkpromptProps> {
     }
   }
 
-  render({ originalUrl }: NullstackMarkpromptProps) {
+  render() {
     return (
       <div class="relative flex h-full flex-col prose-invert">
         <div class="h-12 border-b border-neutral-900">
@@ -178,25 +205,7 @@ class Markprompt extends Nullstack<MarkpromptProps> {
           class="hidden-scrollbar prose absolute inset-x-0 bottom-0 top-12 z-0 max-w-full overflow-y-auto scroll-smooth py-4 pb-8 dark:prose-invert"
         >
           <WithCaret loading={this.loading}>{this.answer}</WithCaret>
-          {this.answer.length > 0 && this.references.length > 0 && (
-            <div class="mt-8 border-t border-neutral-900 pt-4 text-sm text-neutral-500">
-              <div class="animate-slide-up">
-                Summary generated from the following sources:
-                <div class="mt-4 flex w-full flex-row flex-wrap items-center gap-2">
-                  {this.references.map((r) => (
-                    <a
-                      key={`reference-${r}`}
-                      class="cursor-pointer rounded-md border border-neutral-900 bg-neutral-1100 px-2 py-1 font-medium text-neutral-300 transition hover:border-neutral-800 hover:text-neutral-200"
-                      href={`${originalUrl}${r}`}
-                      target="_blank"
-                    >
-                      {r}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
+          <References />
           <div ref={this.answerContainerRef} />
         </div>
       </div>
