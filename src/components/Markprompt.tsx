@@ -8,7 +8,7 @@ declare const References: Markprompt['renderReferences']
 const MARKPROMPT_COMPLETIONS_URL = 'https://api.markprompt.com/v1/completions'
 const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___'
 
-type OpenAIModel = OpenAIChatCompletionsModel | OpenAICompletionsModel
+export type OpenAIModel = OpenAIChatCompletionsModel | OpenAICompletionsModel
 
 type OpenAIChatCompletionsModel =
   | 'gpt-4'
@@ -96,7 +96,6 @@ class Markprompt extends Nullstack<MarkpromptProps> {
             <div class="mt-4 flex w-full flex-row flex-wrap items-center gap-2">
               {this.references.map((r) => (
                 <a
-                  key={`reference-${r}`}
                   class="cursor-pointer rounded-md border border-neutral-900 bg-neutral-1100 px-2 py-1 font-medium text-neutral-300 transition hover:border-neutral-800 hover:text-neutral-200"
                   href={`${originalUrl}${r}`}
                   target="_blank"
@@ -117,7 +116,7 @@ class Markprompt extends Nullstack<MarkpromptProps> {
     completionsUrl = MARKPROMPT_COMPLETIONS_URL,
     model = DEFAULT_MODEL,
   }: NullstackMarkpromptProps) {
-    if (!this.prompt) {
+    if (!this.prompt || this.loading) {
       return
     }
 
@@ -181,7 +180,7 @@ class Markprompt extends Nullstack<MarkpromptProps> {
     }
   }
 
-  render() {
+  render({ docsUrl }: NullstackMarkpromptProps) {
     return (
       <div class="relative flex h-full flex-col prose-invert">
         <div class="h-12 border-b border-neutral-900">
@@ -199,12 +198,13 @@ class Markprompt extends Nullstack<MarkpromptProps> {
             />
           </form>
         </div>
-        <div class="absolute inset-x-0 bottom-0 z-10 h-10 bg-gradient-to-t from-neutral-1100 to-neutral-1100/0" />
         <div
           ref={this.containerRef}
           class="hidden-scrollbar prose absolute inset-x-0 bottom-0 top-12 z-0 max-w-full overflow-y-auto scroll-smooth py-4 pb-8 dark:prose-invert"
         >
-          <WithCaret loading={this.loading}>{this.answer}</WithCaret>
+          <WithCaret loading={this.loading} docsUrl={docsUrl}>
+            {this.answer}
+          </WithCaret>
           <References />
           <div ref={this.answerContainerRef} />
         </div>

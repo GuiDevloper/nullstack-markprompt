@@ -8,7 +8,13 @@ class ProjectIcon extends Nullstack {
     const { name, Icon } = findProject(params.project)
     if (!Icon) return name ? <b>{name}</b> : false
 
-    return <>{PROJECTS.map((P) => P.Icon && P.name === name && <P.Icon />)}</>
+    return (
+      <>
+        {PROJECTS.map((P) => {
+          return P.Icon && P.name === name && <P.Icon />
+        })}
+      </>
+    )
   }
 
 }

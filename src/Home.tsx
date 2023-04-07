@@ -1,7 +1,7 @@
 import Nullstack, { NullstackClientContext } from 'nullstack'
 
 import Footer from './components/Footer'
-import Markprompt from './components/Markprompt'
+import Markprompt, { OpenAIModel } from './components/Markprompt'
 import ProjectIcon from './components/ProjectIcon'
 import ProjectsDropdown from './components/ProjectsDropdown'
 import { findProject, getSettingsKeyName } from './utils/projects'
@@ -13,9 +13,14 @@ class Home extends Nullstack {
     page.description = `${project.name} was made with Nullstack`
   }
 
-  render({ params, settings }: NullstackClientContext) {
-    const Project = findProject(params.project)
-    const projectKey = settings[getSettingsKeyName(Project.envKey)]
+  render({
+    params,
+    settings,
+  }: NullstackClientContext & {
+    params: { model: OpenAIModel }
+  }) {
+    const PROJECT = findProject(params.project)
+    const projectKey = settings[getSettingsKeyName(PROJECT.envKey)]
 
     return (
       <section class="w-full max-w-3xl h-screen mx-auto flex flex-wrap">
@@ -25,19 +30,20 @@ class Home extends Nullstack {
               <ProjectIcon />
               <ProjectsDropdown />
             </div>
-            <div class="max-h-[700px] w-full max-w-[720px] flex-grow rounded-xl bg-neutral-1100 p-8 shadow-2xl">
+            <div class="max-h-[700px] w-full max-w-[720px] flex-grow rounded-xl bg-neutral-1100 p-8 pb-10 shadow-2xl">
               {projectKey ? (
                 <Markprompt
                   projectKey={projectKey.toString()}
-                  projectName={Project.name}
-                  originalUrl={Project.originalUrl}
-                  docsUrl={Project.docsUrl}
+                  projectName={PROJECT.name}
+                  originalUrl={PROJECT.originalUrl}
+                  docsUrl={PROJECT.docsUrl}
+                  model={params.model}
                 />
               ) : (
                 <p class="px-4 pt-12 text-center text-sm text-neutral-400">
                   You need to set the{' '}
                   <code class="font-mono text-sky-400">
-                    NULLSTACK_SETTINGS_{Project.envKey}
+                    NULLSTACK_SETTINGS_{PROJECT.envKey}
                   </code>{' '}
                   environment variable to your project&apos;s public API key.
                   You can find your key in the Markprompt dashboard, under the
