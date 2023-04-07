@@ -5,7 +5,7 @@ import {
   CompletionsModel,
   DEFAULT_MODEL,
   OpenAIModel,
-} from './Markprompt'
+} from '../types'
 
 const OpenAIModels = [...ChatCompletionsModel, ...CompletionsModel]
 

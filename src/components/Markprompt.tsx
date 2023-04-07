@@ -1,41 +1,14 @@
 import '../styles/Markprompt.css'
 import Nullstack, { NullstackClientContext } from 'nullstack'
 
+import { DEFAULT_MODEL, OpenAIModel } from '../types'
+import ModelSelect from './ModelSelect'
 import WithCaret from './WithCaret'
 
 declare const References: Markprompt['renderReferences']
 
 const MARKPROMPT_COMPLETIONS_URL = 'https://api.markprompt.com/v1/completions'
 const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___'
-
-export type OpenAIModel = OpenAIChatCompletionsModel | OpenAICompletionsModel
-
-export const ChatCompletionsModel = [
-  'gpt-4',
-  'gpt-4-0314',
-  'gpt-4-32k',
-  'gpt-4-32k-0314',
-  'gpt-3.5-turbo',
-  'gpt-3.5-turbo-0301',
-] as const
-
-type OpenAIChatCompletionsModel = (typeof ChatCompletionsModel)[number]
-
-export const CompletionsModel = [
-  'text-davinci-003',
-  'text-davinci-002',
-  'text-curie-001',
-  'text-babbage-001',
-  'text-ada-001',
-  'davinci',
-  'curie',
-  'babbage',
-  'ada',
-] as const
-
-type OpenAICompletionsModel = (typeof CompletionsModel)[number]
-
-export const DEFAULT_MODEL: OpenAIModel = 'gpt-3.5-turbo'
 
 type MarkpromptProps = {
   projectKey: string
@@ -188,33 +161,36 @@ class Markprompt extends Nullstack<MarkpromptProps> {
 
   render({ docsUrl }: NullstackMarkpromptProps) {
     return (
-      <div class="relative flex h-full flex-col prose-invert">
-        <div class="h-12 border-b border-neutral-900">
-          <form onsubmit={this.callPrompt}>
-            <input
-              bind={this.prompt}
-              type="text"
-              placeholder={this.getPlaceholder({})}
-              class="w-full appearance-none rounded-md border-0 bg-transparent px-0 pt-1 pb-2 outline-none placeholder:text-neutral-500 focus:outline-none focus:ring-0 text-base md:text-lg"
-              autocomplete="off"
-              autocorrect="off"
-              autocapitalize="none"
-              spellcheck="false"
-              autofocus
-            />
-          </form>
+      <>
+        <div class="relative flex h-full flex-col prose-invert">
+          <div class="h-12 border-b border-neutral-900">
+            <form onsubmit={this.callPrompt}>
+              <input
+                bind={this.prompt}
+                type="text"
+                placeholder={this.getPlaceholder({})}
+                class="w-full appearance-none rounded-md border-0 bg-transparent px-0 pt-1 pb-2 outline-none placeholder:text-neutral-500 focus:outline-none focus:ring-0 text-base md:text-lg"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="none"
+                spellcheck="false"
+                autofocus
+              />
+            </form>
+          </div>
+          <div
+            ref={this.containerRef}
+            class="hidden-scrollbar prose absolute inset-x-0 bottom-0 top-12 z-0 max-w-full overflow-y-auto scroll-smooth py-4 pb-8 dark:prose-invert"
+          >
+            <WithCaret loading={this.loading} docsUrl={docsUrl}>
+              {this.answer}
+            </WithCaret>
+            <References />
+            <div ref={this.answerContainerRef} />
+          </div>
         </div>
-        <div
-          ref={this.containerRef}
-          class="hidden-scrollbar prose absolute inset-x-0 bottom-0 top-12 z-0 max-w-full overflow-y-auto scroll-smooth py-4 pb-8 dark:prose-invert"
-        >
-          <WithCaret loading={this.loading} docsUrl={docsUrl}>
-            {this.answer}
-          </WithCaret>
-          <References />
-          <div ref={this.answerContainerRef} />
-        </div>
-      </div>
+        <ModelSelect />
+      </>
     )
   }
 
