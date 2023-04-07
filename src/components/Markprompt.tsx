@@ -10,26 +10,32 @@ const STREAM_SEPARATOR = '___START_RESPONSE_STREAM___'
 
 export type OpenAIModel = OpenAIChatCompletionsModel | OpenAICompletionsModel
 
-type OpenAIChatCompletionsModel =
-  | 'gpt-4'
-  | 'gpt-4-0314'
-  | 'gpt-4-32k'
-  | 'gpt-4-32k-0314'
-  | 'gpt-3.5-turbo'
-  | 'gpt-3.5-turbo-0301'
+export const ChatCompletionsModel = [
+  'gpt-4',
+  'gpt-4-0314',
+  'gpt-4-32k',
+  'gpt-4-32k-0314',
+  'gpt-3.5-turbo',
+  'gpt-3.5-turbo-0301',
+] as const
 
-type OpenAICompletionsModel =
-  | 'text-davinci-003'
-  | 'text-davinci-002'
-  | 'text-curie-001'
-  | 'text-babbage-001'
-  | 'text-ada-001'
-  | 'davinci'
-  | 'curie'
-  | 'babbage'
-  | 'ada'
+type OpenAIChatCompletionsModel = (typeof ChatCompletionsModel)[number]
 
-const DEFAULT_MODEL: OpenAIModel = 'gpt-3.5-turbo'
+export const CompletionsModel = [
+  'text-davinci-003',
+  'text-davinci-002',
+  'text-curie-001',
+  'text-babbage-001',
+  'text-ada-001',
+  'davinci',
+  'curie',
+  'babbage',
+  'ada',
+] as const
+
+type OpenAICompletionsModel = (typeof CompletionsModel)[number]
+
+export const DEFAULT_MODEL: OpenAIModel = 'gpt-3.5-turbo'
 
 type MarkpromptProps = {
   projectKey: string

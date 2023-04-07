@@ -2,6 +2,7 @@ import Nullstack, { NullstackClientContext } from 'nullstack'
 
 import Footer from './components/Footer'
 import Markprompt, { OpenAIModel } from './components/Markprompt'
+import ModelSelect from './components/ModelSelect'
 import ProjectIcon from './components/ProjectIcon'
 import ProjectsDropdown from './components/ProjectsDropdown'
 import { findProject, getSettingsKeyName } from './utils/projects'
@@ -50,6 +51,7 @@ class Home extends Nullstack {
                   project settings.
                 </p>
               )}
+              <ModelSelect />
             </div>
           </div>
         </div>
