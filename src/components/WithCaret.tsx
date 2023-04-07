@@ -11,7 +11,9 @@ import type { NullstackMarkpromptProps } from './Markprompt'
 import 'prismjs/components/prism-jsx.min'
 const MD = new Remarkable({
   highlight(code, lang) {
-    if (!PrismLangs[lang]) return ''
+    if (!PrismLangs[lang]) {
+      return PrismHighlight(code, PrismLangs.jsx, 'javascript')
+    }
 
     return PrismHighlight(code, PrismLangs[lang], lang)
   },

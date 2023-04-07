@@ -1,10 +1,11 @@
 export default (args) => (
   <svg
-    {...args}
     viewBox="0 0 180 127"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    {...args}
   >
+    <title>Markprompt Icon</title>
     <rect
       x="2"
       y="2"

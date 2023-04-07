@@ -34,13 +34,17 @@ class ModelSelect extends Nullstack {
           Model:
         </label>
         <select
-          class="bg-inherit"
+          class="bg-inherit cursor-pointer"
           onchange={this.goToModel}
           bind={this.selectedModel}
           id="model-select"
         >
           {OpenAIModels.map((Model) => (
-            <option class="bg-black" value={Model}>
+            <option
+              class="bg-black"
+              value={Model}
+              selected={this.selectedModel === Model}
+            >
               {Model}
             </option>
           ))}

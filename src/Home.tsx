@@ -24,8 +24,8 @@ class Home extends Nullstack {
     const projectKey = settings[getSettingsKeyName(PROJECT.envKey)]
 
     return (
-      <section class="w-full max-w-3xl h-screen mx-auto flex flex-wrap">
-        <div class="flex h-[calc(100vh-50px)] w-screen items-center justify-center px-4 py-4 pb-0">
+      <section class="w-full max-w-3xl h-screen min-h-[500px] mx-auto flex flex-wrap">
+        <div class="flex h-[calc(100vh-50px)] min-h-[400px] w-screen items-center justify-center px-4 py-4 pb-0">
           <div class="flex h-full w-full flex-col items-center justify-center gap-4 md:gap-8">
             <div class="flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
               <ProjectIcon />

@@ -2,6 +2,7 @@ import NullstackLogo from 'nullstack/logo'
 import { camelize } from 'nullstack/shared/string'
 
 import ViteIcon from '../components/ViteIcon'
+import VueIcon from '../components/VueIcon'
 
 export const PROJECTS = [
   // Replacing with your project data makes it usable for you
@@ -20,6 +21,14 @@ export const PROJECTS = [
     originalUrl: 'https://github.com/vitejs/vite/tree/main',
     docsUrl: 'https://github.com/vitejs/vite/tree/main/docs',
     Icon: () => ViteIcon({ height: 30 }),
+  },
+  {
+    url: 'vue3',
+    name: 'Vue3',
+    envKey: 'VUE3_KEY',
+    originalUrl: 'https://github.com/vuejs/docs/tree/main',
+    docsUrl: 'https://github.com/vuejs/docs/tree/main',
+    Icon: () => VueIcon({ height: 35 }),
   },
 ]
 

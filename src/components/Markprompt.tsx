@@ -152,6 +152,7 @@ class Markprompt extends Nullstack<MarkpromptProps> {
         }
       }
       this.loading = false
+      if (this.answer === '') throw Error('Not answered by API')
       this.setReferences({ refs })
     } catch (e) {
       console.error('Error', e)
