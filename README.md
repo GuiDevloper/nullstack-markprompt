@@ -12,6 +12,8 @@ Install the dependencies:
 
 Rename the **.env.example** file to **.env** and update with your MarkPrompt keys.
 
+> With exception of keys, the project configuration data is in the `PROJECTS` constant at [projects.ts](./src/utils/projects.ts), replace that to make it work as you like
+
 Run the app in development mode:
 
 `pnpm start`
