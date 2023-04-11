@@ -27,7 +27,7 @@ export const PROJECTS = [
     name: 'Vue3',
     envKey: 'VUE3_KEY',
     originalUrl: 'https://github.com/vuejs/docs/tree/main',
-    docsUrl: 'https://github.com/vuejs/docs/tree/main',
+    docsUrl: 'https://github.com/vuejs/docs/tree/main/src',
     Icon: () => VueIcon({ height: 35 }),
   },
 ]

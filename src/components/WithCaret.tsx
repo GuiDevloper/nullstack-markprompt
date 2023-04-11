@@ -20,7 +20,10 @@ const MD = new Remarkable({
 })
 
 function addHostToSublinks(host: string, content: string) {
-  return content.replace(/\]\(([^http]){1}/, `](${host}$1`)
+  return content.replace(
+    /\]\(([^http].*?)(\.md|)(#.*?|)\)/g,
+    `](${host}$1.md$3)`,
+  )
 }
 
 type WithCaretProps = NullstackMarkpromptProps & {
