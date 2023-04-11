@@ -30,11 +30,11 @@ class ModelSelect extends Nullstack {
   render() {
     return (
       <form class="flex place-content-end text-sm text-gray-400">
-        <label for="model-select" class="mt-0.5">
+        <label for="model-select" class="mt-2">
           Model:
         </label>
         <select
-          class="bg-inherit cursor-pointer"
+          class="bg-inherit cursor-pointer h-8"
           onchange={this.goToModel}
           bind={this.selectedModel}
           id="model-select"

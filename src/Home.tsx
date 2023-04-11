@@ -31,7 +31,7 @@ class Home extends Nullstack {
               <ProjectIcon />
               <ProjectsDropdown />
             </div>
-            <div class="max-h-[700px] w-full max-w-[720px] flex-grow rounded-xl bg-neutral-1100 p-8 pb-10 shadow-2xl">
+            <div class="max-h-[700px] w-full max-w-[720px] flex-grow rounded-xl bg-neutral-1100 p-8 pb-12 shadow-2xl">
               {projectKey ? (
                 <Markprompt
                   projectKey={projectKey.toString()}
