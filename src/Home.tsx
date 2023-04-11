@@ -1,8 +1,8 @@
 import Nullstack, { NullstackClientContext } from 'nullstack'
 
 import Footer from './components/Footer'
+import ProjectIcon from './components/Icons/ProjectIcon'
 import Markprompt from './components/Markprompt'
-import ProjectIcon from './components/ProjectIcon'
 import ProjectsDropdown from './components/ProjectsDropdown'
 import { OpenAIModel } from './types'
 import { findProject, getSettingsKeyName } from './utils/projects'

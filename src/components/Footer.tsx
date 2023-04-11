@@ -1,7 +1,7 @@
 import Nullstack from 'nullstack'
 import NullstackLogo from 'nullstack/logo'
 
-import MarkpromptIcon from './MarkpromptIcon'
+import MarkpromptIcon from './Icons/MarkpromptIcon'
 
 class Footer extends Nullstack {
 

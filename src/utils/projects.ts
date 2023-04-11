@@ -1,8 +1,8 @@
 import NullstackLogo from 'nullstack/logo'
 import { camelize } from 'nullstack/shared/string'
 
-import ViteIcon from '../components/ViteIcon'
-import VueIcon from '../components/VueIcon'
+import ViteIcon from '../components/Icons/ViteIcon'
+import VueIcon from '../components/Icons/VueIcon'
 
 export const PROJECTS = [
   // Replacing with your project data makes it usable for you
