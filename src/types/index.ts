@@ -25,4 +25,4 @@ export const CompletionsModel = [
 
 type OpenAICompletionsModel = (typeof CompletionsModel)[number]
 
-export const DEFAULT_MODEL: OpenAIModel = 'gpt-3.5-turbo'
+export const DEFAULT_MODEL: OpenAIModel = 'gpt-4'
