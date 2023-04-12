@@ -1,6 +1,6 @@
 import Nullstack, { NullstackClientContext } from 'nullstack'
 
-import { findProject, PROJECTS } from '../../utils/projects'
+import { findProject, PROJECTS } from '@utils/projects'
 
 class ProjectIcon extends Nullstack {
 

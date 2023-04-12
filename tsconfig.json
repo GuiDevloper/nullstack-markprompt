@@ -3,6 +3,10 @@
     "strict": false,
     "noImplicitAny": false,
     "jsx": "preserve",
-    "lib": ["ES2015", "DOM"]
+    "lib": ["ES2015", "DOM"],
+    "baseUrl": "./",
+    "paths": {
+      "@utils/*": ["src/utils/*"],
+    }
   }
 }

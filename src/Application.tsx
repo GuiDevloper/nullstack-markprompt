@@ -1,9 +1,10 @@
 import './styles/tailwind.css'
 import Nullstack, { NullstackClientContext } from 'nullstack'
 
+import { projectExists } from '@utils/projects'
+
 import ErrorPage from './ErrorPage'
 import Home from './Home'
-import { projectExists } from './utils/projects'
 
 class Application extends Nullstack {
 

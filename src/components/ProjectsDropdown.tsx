@@ -1,6 +1,6 @@
 import Nullstack, { NullstackClientContext } from 'nullstack'
 
-import { PROJECTS } from '../utils/projects'
+import { PROJECTS } from '@utils/projects'
 
 function haveBorder(idx: number) {
   const have = idx < PROJECTS.length - 1
