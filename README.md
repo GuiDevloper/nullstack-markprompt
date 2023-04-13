@@ -2,6 +2,8 @@
 
 Personal [ChatGPT](https://chat.openai.com/)s for questions about docs powered by [Markprompt](https://markprompt.com) & [Nullstack](https://nullstack.app)
 
+> [Twitter thread with videos explaining more the project in portuguese](https://twitter.com/GuiDevloper/status/1646328285133955078)
+
 <img src='https://raw.githubusercontent.com/nullstack/nullstack/master/nullstack.png' height='40' alt='Nullstack' />
 
 ## How to run this project
