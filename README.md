@@ -1,4 +1,4 @@
-# Nullstack Markprompt
+# Test
 
 Personal [ChatGPT](https://chat.openai.com/)s for questions about docs powered by [Markprompt](https://markprompt.com) & [Nullstack](https://nullstack.app)
 
